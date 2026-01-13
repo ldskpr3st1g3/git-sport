@@ -25,24 +25,42 @@ void operator<<(ostream& os, vector<T> arr)
 const int INF = (int)1e9;
 constexpr const int n = (int)1e6;
  
+int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<pair<int,int>> pairs;
+        pairs.reserve(strs.size());
+        for(const auto& elem : strs)
+        {
+            pairs.push_back({count(all(elem),'0'), count(all(elem),'1')});
+        }
+        
+        sort(all(pairs), [](const auto& left, const auto& right){return left.second + left.first < right.second + right.first;});
+        pair<int,int> temp{m,n};
+        int max_len = 0;
+        for(const auto& elem : pairs)
+        {
+            if(temp.first - elem.first >= 0 && temp.second - elem.second >=0)
+            {
+                temp.first -= elem.first, temp.second -=elem.second;
+                ++max_len;
+            }
+            else continue;
+            
+            
+           if (temp.first + temp.second){
+                return max_len;
+           }
+        }
+        return max_len;
+    }
+
+
 void solve()
 {
-	string str; cin >> str;
-	str = "u" + str + "u";
-	int ans = 0;
-	for(int i{1}; i < (int)str.size(); ++i) if(str[i-1] == 'u' && str[i] == 'u') str[i] = 's', ++ans;
-	cout << ans << '\n';
+	vector<string> strs{"10", "1", "0"};
+	cout << findMaxForm(strs, 1,1);
 }
  
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	int T; cin >> T;
-	while(T-->0)
-	{
-		solve();
-	}
-	
+	solve;
 }
